@@ -11,4 +11,20 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  namespace :api do
+    namespace :v1 do
+      post '/auth/register', to: 'auth#register'
+      post '/auth/login', to: 'auth#login'
+      
+      resources :items
+      
+      get '/users/profile', to: 'users#profile'
+      get '/users/dashboard', to: 'users#dashboard'
+      patch '/users/profile', to: 'users#update_profile'
+    end
+  end
+
+  # Serve the React frontend
+  get '*path', to: 'fallback#index', constraints: ->(req) { !req.xhr? && req.format.html? }
 end
